@@ -1,40 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { Instagram, Heart, MessageCircle } from 'lucide-react';
+import { Instagram, Heart, MessageCircle, Play, Film } from 'lucide-react';
 
-const INSTA_POSTS = [
+const REAL_MEDIA_ITEMS = [
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1587061949409-02df41d5e562?auto=format&fit=crop&w=600&q=80',
-    likes: '142',
-    comments: '18',
-    caption: 'Manhã radiante com cheiro de serra no Ariticum Chalés 🌿☕'
+    type: 'video',
+    src: '/midia/snapinsta-1790034147694.mp4',
+    poster: '/midia/snapgram.io_175079632579.jpg',
+    caption: 'Área da Piscina com vista para as serras e verde do Sítio Araticum 🏊‍♂️🌿',
+    likes: '412',
+    comments: '38'
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80',
-    likes: '230',
-    comments: '34',
-    caption: 'Tarde de sol e tranquilidade na nossa piscina. Venha renovar suas energias! 🏊‍♂️✨'
+    type: 'video',
+    src: '/midia/snapinsta-1790034163448.mp4',
+    poster: '/midia/snapgram.io_169006600724.jpg',
+    caption: 'Tour pelo Chalé Mezanino: estrutura em 2 níveis super aconchegante! 🏡✨',
+    likes: '528',
+    comments: '64'
   },
   {
     id: 3,
-    image: 'https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=600&q=80',
-    likes: '189',
-    comments: '22',
-    caption: 'Cozinha gourmet privativa no chalé para preparar aquele jantar especial 🍷🍝'
+    type: 'video',
+    src: '/midia/snapgram.io_207936811769.mp4',
+    poster: '/midia/snapgram.io_175079632579.jpg',
+    caption: 'Noites frias e névoa de serra no Ariticum Chalés em Lagoa Seca 🌫️🔥',
+    likes: '389',
+    comments: '42'
   },
   {
     id: 4,
-    image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=600&q=80',
+    type: 'video',
+    src: '/midia/snapgram.io_211405166547.mp4',
+    poster: '/midia/snapgram.io_169006600724.jpg',
+    caption: 'Cozinha gourmet privativa equipada em cada chalé 🍷🍝',
     likes: '310',
-    comments: '45',
-    caption: 'Noites aconchegantes ao redor do fogo de chão na serra de Lagoa Seca 🔥'
+    comments: '29'
   }
 ];
 
 export default function InstagramSection() {
   const { t } = useLanguage();
+  const [activeVideo, setActiveVideo] = useState(null);
 
   return (
     <section id="galeria" className="py-24 bg-[#FAF7F2]">
@@ -44,7 +53,7 @@ export default function InstagramSection() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-600 via-pink-600 to-amber-500 text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow mb-3">
             <Instagram className="w-4 h-4" />
-            <span>@ariticum_chales</span>
+            <span>@ariticum_chales • 19,7 mil seguidores</span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#0A3526]">
             {t('instagram.title')}
@@ -54,37 +63,47 @@ export default function InstagramSection() {
           </p>
         </div>
 
-        {/* Photo Mosaic Grid */}
+        {/* Video Reels Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {INSTA_POSTS.map((post) => (
-            <a
-              key={post.id}
-              href="https://www.instagram.com/ariticum_chales/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative group rounded-3xl overflow-hidden shadow-lg h-72 block bg-[#0A3526]"
+          {REAL_MEDIA_ITEMS.map((item) => (
+            <div
+              key={item.id}
+              className="relative group rounded-3xl overflow-hidden shadow-xl h-80 bg-black cursor-pointer transform hover:-translate-y-1 transition-all border border-gray-100"
+              onClick={() => setActiveVideo(item.src)}
             >
-              <img
-                src={post.image}
-                alt={post.caption}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-6 flex flex-col justify-end text-white">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                poster={item.poster}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              >
+                <source src={item.src} type="video/mp4" />
+              </video>
+
+              {/* Play Badge */}
+              <div className="absolute top-4 right-4 bg-black/60 backdrop-blur text-white p-2 rounded-full shadow">
+                <Film className="w-4 h-4 text-pink-400" />
+              </div>
+
+              {/* Hover Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent opacity-90 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end text-white">
                 <p className="text-xs line-clamp-2 mb-4 font-light leading-relaxed">
-                  {post.caption}
+                  {item.caption}
                 </p>
-                <div className="flex items-center space-x-4 text-xs font-semibold text-pink-300">
+                <div className="flex items-center justify-between text-xs font-semibold text-pink-300 border-t border-white/10 pt-3">
                   <span className="flex items-center space-x-1">
-                    <Heart className="w-4 h-4 fill-current" />
-                    <span>{post.likes}</span>
+                    <Heart className="w-4 h-4 fill-current text-pink-500" />
+                    <span>{item.likes}</span>
                   </span>
-                  <span className="flex items-center space-x-1 text-white">
+                  <span className="flex items-center space-x-1 text-white/80">
                     <MessageCircle className="w-4 h-4" />
-                    <span>{post.comments}</span>
+                    <span>{item.comments}</span>
                   </span>
                 </div>
               </div>
-            </a>
+            </div>
           ))}
         </div>
 
